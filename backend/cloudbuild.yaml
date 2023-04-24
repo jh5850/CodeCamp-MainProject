@@ -1,0 +1,31 @@
+steps:
+  #1단계 => docker-compose -f docker-compose.prod.yaml build
+  - name: docker/compose:1.29.0
+    args:
+      - -f
+      - homework/main-project/backend/docker-compose.prod.yaml
+      - build
+
+    #homework/main-project/backend/cloudbuild.yaml
+
+  #2단계 => docker-compose -f docker-compose.prod.yaml push
+  - name: docker/compose:1.29.0
+    args:
+      - -f
+      - homework/main-project/backend/docker-compose.prod.yaml
+      - push
+
+  #3단계 => kubectl set image deployment/mybackend-nestjs2 mybackend10-nestjs-sha256-1=asia.gcr.io/propane-cubist-372212/mybackend10-nestjs:1.6
+  - name: gcr.io/cloud-builders/kubectl
+    args: 
+      - set
+      - image
+      - deployment/mybackend-nestjs2
+      - mybackend10-nestjs-sha256-1=asia.gcr.io/propane-cubist-372212/mybackend10-nestjs:1.8
+    env:
+      - CLOUDSDK_COMPUTE_ZONE=asia-northeast3
+      - CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-2
+
+
+# 2222
+

@@ -1,0 +1,129 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: String!
+  email: String!
+  name: String!
+  phone: String!
+  birth: String!
+  address: String!
+  payment: Int!
+}
+
+type Payment {
+  id: String!
+  impUid: String!
+  status: POINT_TRANSACTION_STATUS_ENUM!
+  amount: Int!
+  method: String!
+  reason: String!
+  user: User!
+  cratedAt: DateTime!
+}
+
+enum POINT_TRANSACTION_STATUS_ENUM {
+  PAYMENT
+  CANCEL
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type ProductCategory {
+  id: String!
+  name: String!
+  set: Boolean!
+}
+
+type Product {
+  id: String!
+  ko_name: String!
+  en_name: String!
+  detail: String!
+  kcal: Int!
+  sugar: Int!
+  protein: Int!
+  transfat: Int!
+  salt: Int!
+  isSoldout: Boolean!
+  productCategory: ProductCategory!
+  payment: Payment!
+  productAllergy: [ProductAllergy!]!
+}
+
+type ProductAllergy {
+  id: String!
+  name: String!
+  products: [Product!]!
+}
+
+type Query {
+  fetchProducts: [Product!]!
+  fetchProduct(productId: String!): Product!
+  fetchProductsWithDeleted: [Product!]!
+  fetchUser(email: String!): User!
+  fetchUsers: [User!]!
+  fetchLoginUser: User!
+}
+
+type Mutation {
+  login(email: String!, password: String!): String!
+  restoreAcessToken: String!
+  logout: String!
+  uploadFile(files: [Upload!]!): [String!]!
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
+  restoreProduct(productId: String!): Boolean!
+  deleteProduct(productId: String!): Boolean!
+  createProductCategory(name: String!): ProductCategory!
+  createPayment(impUid: String!, amount: Int!): Payment!
+  cancelPayment(impUid: String!, amount: Int!): Payment!
+  createUser(email: String!, name: String!, phone: String!, birth: String!, address: String!, password: String!): User!
+  updateUser(email: String!, UpdateUserInput: UpdateUserInput!): User!
+  deleteUser(UserId: String!): Boolean!
+  deleteLoginUser: Boolean!
+  updateLoginUser(password: String!): Boolean!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input CreateProductInput {
+  ko_name: String!
+  en_name: String!
+  detail: String!
+  kcal: Int!
+  sugar: Int!
+  protein: Int!
+  transfat: Int!
+  salt: Int!
+  ProductCategoryId: String!
+  ProductAllergy: [String!]!
+}
+
+input UpdateProductInput {
+  ko_name: String
+  en_name: String
+  detail: String
+  kcal: Int
+  sugar: Int
+  protein: Int
+  transfat: Int
+  salt: Int
+  ProductCategoryId: String
+  ProductAllergy: [String!]
+}
+
+input UpdateUserInput {
+  id: String
+  email: String
+  name: String
+  phone: String
+  birth: String
+  address: String
+  password: String
+}
